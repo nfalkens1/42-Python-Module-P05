@@ -92,3 +92,17 @@ class LogProcessor(DataProcessor):
                                isinstance(k, str) and isinstance(v, str) for
                                k, v in item.items()) for item in data)
         return is_str_dict or is_list_str_dict
+
+    def ingest(self, data: dict[str, str] | list[dict[str, str]]) -> None:
+        if not self.validate(data):
+            raise TypeError("Improper log data")
+
+        if isinstance(data, list):
+            for item in data:
+                log_format = f"{item['log_level']}: {item['log_message']}"
+                self.data.append(log_format)
+                self.rank += 1
+        else:
+            log_format = f"{data['log_level']}: {data['log_message']}"
+            self.data.append(log_format)
+            self.rank += 1
