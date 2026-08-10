@@ -158,41 +158,13 @@ class DataStream:
             print(f"{name}: total {total} items processed, "
                   f"remaining {remaining} on processor")
 
+    def output_pipeline(self, nb: int, plugin: ExportPlugin) -> None:
+        ...
 
-if __name__ == "__main__":
-    header = "=== Code Nexus - Data Stream ==="
-    print(f"\n{header}\n")
-    print("Initialize Data Stream...")
-    data_stream = DataStream()
-    data_stream.print_processors_stats()
-    print("\nRegistering Numeric Processor\n")
-    numeric_proc = NumericProcessor()
-    data_stream.register_processor(numeric_proc)
-    log_entries = [
-        {'log_level': 'WARNING',
-         'log_message': 'Telnet access! Use ssh instead'},
-        {'log_level': 'INFO',
-         'log_message': 'User wil is connected'},
-    ]
-    first_batch: list[Any] = [
-        'Hello world', [3.14, -1, 2.71], log_entries, 42, ['Hi', 'five'],
-    ]
-    print(f"Send first batch of data to stream: {first_batch}")
-    data_stream.process_stream(first_batch)
-    data_stream.print_processors_stats()
-    print("\nRegistering other data processors")
-    text_proc = TextProcessor()
-    log_proc = LogProcessor()
-    data_stream.register_processor(text_proc)
-    data_stream.register_processor(log_proc)
-    print("Send the same batch again")
-    data_stream.process_stream(first_batch)
-    data_stream.print_processors_stats()
-    print("\nConsume some elements from the data processors: "
-          "Numeric 3, Text 2, Log 1")
-    for i in range(3):
-        numeric_proc.output()
-    for i in range(2):
-        text_proc.output()
-    log_proc.output()
-    data_stream.print_processors_stats()
+
+class ExportPlugin:
+    """
+    description goes here
+    """
+    def process_output(self, data: list[tuple[int, str]]) -> None:
+        ...
